@@ -88,6 +88,7 @@ raiokm(larissa, 97).
 raiokm(fobos,11).
 raiokm(deimos,6).
 
+
 % fonte: https://en.wikipedia.org/wiki/List_of_Solar_System_objects_by_size
 
 
@@ -114,3 +115,6 @@ diferenca_raiokm(P1,P2,DIF) :- raiokm(P1,A), raiokm(P2,B),  DIF is abs(A-B).
 
 % A proporção dos raios entre os corpos celestes
 proporcao_raiokm(P1,P2,PRO) :- raiokm(P1,A), raiokm(P2,B),  PRO is A/B.
+
+% Volume do corpo celeste
+volumebikmcub(P,VOL) :- raiokm(P,RAIO), VOL is ((4*3.1415*RAIO^3)/3000000000).
