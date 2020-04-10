@@ -109,13 +109,13 @@ massasterrestres(CORPO,MT) :- massa(CORPO, MASSA), MT is MASSA/(5.972*1E24).
 raio(CORPO,RAIO) :- dados(CORPO,RAIO,_).
 
 % Definição de um planeta
-planeta(P) :- orbita(P,S), estrela(S), dados(P, RAIO), RAIO > 1500.
+planeta(P) :- orbita(P,S), estrela(S), raio(P, RAIO), RAIO > 1500.
 
 % Definição de uma lua
 lua(L) :- orbita(L,P), (planeta(P); planeta_anao(P)).
 
 % Definição de um planeta anão
-planeta_anao(PA) :- orbita(PA,S), estrela(S), dados(PA, RAIO), RAIO < 1500.
+planeta_anao(PA) :- orbita(PA,S), estrela(S), raio(PA, RAIO), RAIO < 1500.
 
 % Definindo os planetas gasosos
 planetagasoso(PGAS) :- planeta(PGAS), raio(PGAS, RAIO), RAIO > 10000.
@@ -125,6 +125,9 @@ planetaterreste(PTER) :- planeta(PTER), (not(planetagasoso(PTER))).
 
 % Se um é maior que o outro
 maiorque(X,Y) :- raio(X,A), raio(Y,B), A>B.
+
+% Se um é mais pesado que o outro
+pesadoque(X,Y) :- massa(X,A), massa(Y,B), A>B.
 
 % Diferença dos raios entre os corpos celestes
 diferenca_raio(P1,P2,DIF) :- raio(P1,A), raio(P2,B),  DIF is abs(A-B).
