@@ -85,7 +85,7 @@ dados(ariel,578, 1.251 * 1E21).
 dados(dione,561, 1.095 * 1E21).
 dados(gonggong,615, 1.75 * 1E21).
 dados(quaoar,560, 1.40 * 1E21).
-dados(sedna,4983, 2 * 1E21).
+dados(sedna,498, 2 * 1E21).
 dados(ceres,469, 8.958 * 1E20).
 dados(disnomia,350, 4 * 1E20).
 dados(proteu, 210, 4.4 * 1E19).
@@ -108,14 +108,19 @@ massasterrestres(CORPO,MT) :- massa(CORPO, MASSA), MT is MASSA/(5.972*1E24).
 % Mostra o raio em kilômetros
 raio(CORPO,RAIO) :- dados(CORPO,RAIO,_).
 
+
+
+% DEFINIÇÕES DOS CORPOS
+
+
 % Definição de um planeta
 planeta(P) :- orbita(P,S), estrela(S), raio(P, RAIO), RAIO > 1500.
 
-% Definição de uma lua
-lua(L) :- orbita(L,P), (planeta(P); planeta_anao(P)).
-
 % Definição de um planeta anão
 planeta_anao(PA) :- orbita(PA,S), estrela(S), raio(PA, RAIO), RAIO < 1500.
+
+% Definição de uma lua
+lua(L) :- orbita(L,P), (planeta(P); planeta_anao(P)).
 
 % Definindo os planetas gasosos
 planetagasoso(PGAS) :- planeta(PGAS), raio(PGAS, RAIO), RAIO > 10000.
@@ -123,17 +128,44 @@ planetagasoso(PGAS) :- planeta(PGAS), raio(PGAS, RAIO), RAIO > 10000.
 % Definindo um planeta terreste
 planetaterreste(PTER) :- planeta(PTER), (not(planetagasoso(PTER))).
 
+
+
+% COMPARAÇÕES
+
+
+% Quais corpos são maiores que um valor
+maioresque(CORPOS,NUM) :- raio(CORPOS,X), X > NUM.
+
+% Quais Corpos são menores que um valor
+menoresque(CORPOS,NUM) :- raio(CORPOS,X), X < NUM.
+
 % Se um é maior que o outro
 maiorque(X,Y) :- raio(X,A), raio(Y,B), A>B.
 
 % Se um é mais pesado que o outro
 pesadoque(X,Y) :- massa(X,A), massa(Y,B), A>B.
 
+% Se um é mais denso que o outro
+densoque(X,Y) :- densidade(X,A), densidade(Y,B), A>B.
+
 % Diferença dos raios entre os corpos celestes
 diferenca_raio(P1,P2,DIF) :- raio(P1,A), raio(P2,B),  DIF is abs(A-B).
 
 % A proporção dos raios entre os corpos celestes
 proporcao_raio(P1,P2,PRO) :- raio(P1,A), raio(P2,B),  PRO is A/B.
+
+% Proporção das massas entre os corpos celestes
+proporcao_massa(C1,C2,PRO) :- massa(C1,M1), massa(C2,M2), PRO is M1/M2.
+
+% A proproção da area entre os objetos
+proporcao_area(C1,C2,PRO) :- area(C1,A1), area(C2,A2), PRO is A1/A2.
+
+% A proporção do volume entre os objetos
+proporcao_volume(C1,C2,PRO) :- volume(C1,V1), volume(C2,V2), PRO is V1/V2.
+
+
+% DADOS ADICIONAIS
+
 
 % Área da superficie de um corpo celeste em km²
 area(CORPO,AREA) :- raio(CORPO,RAIO), AREA is RAIO^2*4*pi.
@@ -146,3 +178,58 @@ densidade(CORPO,DEN) :-  volume(CORPO,VOL), massa(CORPO,MASSA), DEN is (MASSA*10
 
 % Gravidade de superficie de um corpo celeste em m/s²
 gravidade(CORPO,GRA) :- raio(CORPO,RAIO), massa(CORPO,MASSA), GRA is (6.674184*1E-11*MASSA)/((RAIO*1000)^2).
+
+% Velocidade de escape de um corpo celeste em km/s
+veloescape(CORPO,VEL) :- raio(CORPO,RAIO), gravidade(CORPO,GRA) ,VEL is sqrt(2*GRA*RAIO*1000)/1000.
+
+ajuda() :- write("
+
+FUNÇÕES DESTE CODIGO
+
+dados(C,R,M) = Apresenta o raio R e a massa M de um corpo C.
+
+massa(X,Y) = O corpo X tem massa Y em Kilogramas.
+raio(X,Y) = O corpo X tem raio Y em Kilômetros.
+massasterrestres(X,Y) = O corpo X tem Y Massas Terrestres.
+
+planeta(P) = Especifica se P é planeta, P deve orbitar uma estrela e ter raio >1500 km.
+
+planeta_anao(PA) = Especifica se PA é planeta anao, PA deve orbitar uma estrela e ter raio <1500km.
+
+lua(L) = Especifica se L é uma lua, deve orbitar um planeta ou um planeta anão.
+
+planetagasoso(PGAS) = Especifica se PGAS é planeta gasoso, deve ser planeta e ter raio >10000 km.
+
+planetaterrestre(PTER) = Especifica se PTER é planeta terrestre, não é planeta gasoso.
+
+maioresque(C,NUM) = Dado um valor NUM, C retorna todos os corpos com raio maior que NUM.
+
+menoresque(C,NUM) = Dado um valor NUM, C retorna todos os corpos com raio menor que NUM.
+
+maiorque(X,Y) = É verdade que o X é maior que Y ?
+
+pesadoue(X,Y) = É verdade que o X é mais pesado que Y ?
+
+densoque(X,Y) = É verdade que o X é mais denso que Y ?
+
+diferenca_raio (C1,C2,DIF) = Diferença DIF (em módulo) do raio de C1 para C2.
+
+proporcao_raio (C1,C2,PRO) = Proporção PRO do raio de C1 para C2 | Quantas vezes o primeiro corpo é maior que o segundo ?
+
+proporcao_massa (C1,C2,PRO) = Proporção PRO da massa de C1 para C2 | Quantas vezes o primeiro corpo é mais pesado que o segundo ?
+
+proporcao_area (C1,C2,PRO) = Proporção PRO da area de C1 para C2 | Quantas vezes o primeiro corpo é tem mais area que o segundo ?
+
+proporcao_volume (C1,C2,PRO) = Proporção PRO do volume de C1 para C2 | Quantas vezes o primeiro corpo é mais volumoso que o segundo ?
+
+area(C,AR) =  A area AR de um corpo C, em KM².
+
+volume(C, VOL) = O volume VOL de um corpo C, em milhões de KM³
+
+densidade(C, DEN) = A densidade DEN de um corpo C, relacioando com a massa sobre o volume de C, em g/cm³.
+
+gravidade(C, GRA) = A gravidade GRA de um corpo C, em m/s².
+
+veloescape(C,VEL) = Velocidade de escape de um corpo C, em km/s.
+
+").
