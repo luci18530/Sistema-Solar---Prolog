@@ -56,7 +56,7 @@ orbita(hiaka,haumea).
 
 
 % Relações de dados de cada corpo celeste.
-% Função | Corpo | Raio em KM | Massa em KG
+% Dados | Corpo | Raio(KM) | Massa(KG) | Distância ao corpo orbitado
 
 dados(sol,696342, 1.989*1E30, 0).
 dados(mercurio,2439, 3.285*1E23, 57909050).
@@ -184,7 +184,7 @@ proporcao_volume(C1,C2,PRO) :- volume(C1,V1), volume(C2,V2), PRO is V1/V2.
 % Área da superficie de um corpo celeste em km²
 area(CORPO,AREA) :- raio(CORPO,RAIO), AREA is RAIO^2*4*pi.
 
-% Volume do corpo celeste em milhoes de kilometros cubicos
+% Volume do corpo celeste em bilhões de kilometros cubicos
 volume(P,VOL) :- raio(P,RAIO), VOL is ((4*pi*RAIO^3)/3000000000).
 
 % Densidade de um corpo celeste em g/cm³
@@ -246,7 +246,7 @@ proporcao_volume (C1,C2,PRO) = Proporção PRO do volume de C1 para C2 | Quantas v
 
 area(C,AR) =  A area AR de um corpo C, em KM².
 
-volume(C, VOL) = O volume VOL de um corpo C, em milhões de KM³
+volume(C, VOL) = O volume VOL de um corpo C, em bilhões de KM³
 
 densidade(C, DEN) = A densidade DEN de um corpo C, relacioando com a massa sobre o volume de C, em g/cm³.
 
